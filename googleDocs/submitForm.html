@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>submitForm</title>
+</head>
+list name: <input type="text" name="" id="listName">
+<br>
+list Values: (should be CSV for education purpose): 
+<textarea name="" id="list" cols="30" rows="10"></textarea>
+<br>
+<button type="submit" onclick="submit()">submit</button>
+<div id=out></div>
+<body>
+    <script>
+    function submitData(listName,listValues){
+        let link = "https://docs.google.com/forms/d/e/1FAIpQLSeQtCaxyGWUy-T206RQZar_HBnlbfGsNrWglWI5DbTGlwEpcg/viewform?usp=pp_url&entry.653184633=listName&entry.566716893=listVals"
+        link = link.replace("listVals", listValues);
+        link = link.replace("listName",listName);
+        let submit = '&submit=Submit';
+        link = link.replace("viewform", "formResponse");
+        link = link + submit;
+        link = decodeURI(link)
+        let post = document.createElement("iframe")
+        post.src = link;
+        post.id = "postID"
+        post.hidden = true;
+        document.body.appendChild(post)
+    }
+    function removeElementByID(elementID) {
+    let el = document.getElementById(elementID);
+    el.parentNode.removeChild(el);
+}
+function warp(n,v){
+    submitData(n,v)
+    setTimeout(() => {
+        removeElementByID("postID")
+    }, 2000);
+}
+function submit(){
+    warp(listName.value,list.value);
+    out.innerText="sumbitted"
+}
+// https://www.freecodecamp.org/news/cjn-google-sheets-as-json-endpoint/
+// 
+let docs=  "https://docs.google.com/spreadsheets/d/e/2PACX-1vRT941gTOGRzbLlbVO6ioeUWEZKZ87nQIARIoPUhx4kNRMmR4eMZsVLKSJKBPZunulnEadXLZaRolEI/pub?output="
+let tsv = "tsv"
+let csv = "csv"
+let json = "https://spreadsheets.google.com/feeds/cells/1lJYhyiCyGX8G6LuxZ140Jl5UiDZVx1KbBDy6uyEtDdY/1/public/full?alt=json"
+function readLinkData(url) {
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.open('GET', url, true);
+            xmlhttp.onreadystatechange = function() {
+                if (xmlhttp.readyState == 4) {
+                    if (xmlhttp.status == 200) {
+                       console.log(xmlhttp.responseText)
+                    }
+                }
+            };
+            xmlhttp.send(null);
+        }
+    </script>
+</body>
+
+</html>
