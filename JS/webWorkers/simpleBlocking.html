@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Worker test</title>
+</head>
+
+<body>
+    <button onclick="blocking()"> Normal cod </button>
+    <button onclick="nonBlocking()"> worker cod </button>
+</body>
+<script>
+    let message = "4 seconds";
+    function blocking() {
+        wait(4000)
+        console.log(message)
+    }
+
+    function nonBlocking() {
+        let myWorker = new Worker('worker.js');
+        myWorker.postMessage(message);
+        myWorker.onmessage = e => console.log(e.data)
+    }
+    // http://www.endmemo.com/js/pause.php
+    function wait(ms) {
+        let d = new Date();
+        let d2 = null;
+        do { d2 = new Date(); }
+        while (d2 - d < ms);
+    }
+
+</script>
+
+</html>
